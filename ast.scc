@@ -1,0 +1,145 @@
+// one line comment
+/*
+	multiline comment
+*/
+
+Package Test.ast;
+
+Helpers
+digit 			= ['0' .. '9'];
+nondigit		= ['_' + [['a' .. 'z'] + ['A' .. 'Z']] ];
+
+cr				= 13;	/* cartridge return */
+lf				= 10;	/* newline */
+tab				= 9;
+line_terminator = lf | cr | cr lf;
+
+Tokens
+
+add = '+';
+sub = '-';
+mul = '*';
+div = '/';
+left_paren = '(';
+right_paren = ')';
+number = digit+;
+comma  = ',';
+
+semi   = ';';
+
+identifier	= nondigit (digit|nondigit)*;
+
+blank		=  ( cr | lf | tab | ' ' | line_terminator ) +;
+
+Ignored Tokens
+blank;
+
+
+Productions
+
+session = statement_list*;
+statement_list 
+	={one}  statement
+	|{many} statement semi statement_list;
+
+statement =
+	 {expr}expr_sttm
+	 	{-> expr_sttm.statement} 
+	|{id} id_sttm 
+		{-> id_sttm.statement};
+
+expr_sttm
+{-> statement}
+	= expr semi 
+		{-> New statement.expr(expr.abst_expr)};
+
+id_sttm
+{-> statement}
+	= identifier semi
+		{-> New statement.id(identifier)};
+
+expr
+{-> abst_expr}
+	={expr_term} [left]:expr       add [right]:term 
+		{-> New abst_expr.add_expr_term
+			(    left.abst_expr,       right.abst_expr)}
+	|{expr_id}   [left]:expr       add [right]:identifier
+		{-> New abst_expr.add_expr_id  
+			(    left.abst_expr,       right)}
+	|{id_expr}   [left]:identifier add [right]:term
+		{-> New abst_expr.add_id_term
+			(    left,                 right.abst_expr)}
+	|{id_id}     [left]:identifier add [right]:identifier
+		{-> New abst_expr.add_id_id
+			(    left,                 right)}
+	|{term} term 
+		{-> term.abst_expr};
+
+term 
+{-> abst_expr } 
+	={term_factor} [left]:term       mul [right]:factor 
+		{-> New abst_expr.mult_term_factor
+			(      left.abst_expr,       right.abst_expr)}
+	|{term_id}     [left]:term       mul [right]:identifier
+		{-> New abst_expr.mult_term_id 
+			(      left.abst_expr,       right)}
+	|{id_factor}   [left]:identifier mul [right]:factor
+		{-> New abst_expr.mult_id_factor
+			(      left,                 right.abst_expr)}
+	|{id_id}       [left]:identifier mul [right]:identifier
+		{-> New abst_expr.mult_id_id
+			(      left,                 right)}
+	|{factor} factor 
+	  	{->factor.abst_expr};
+
+factor 
+{-> abst_expr}
+	= {number} number 
+		{-> New abst_expr.number(number)}
+	| {parens} left_paren expr right_paren 
+		{-> expr.abst_expr}
+	| {function} [id]:identifier left_paren argument_list? right_paren
+		{-> New abst_expr.function (id, [argument_list.arguments] )};
+
+argument_list
+{-> arguments * }
+	={single_ex} expr
+		{-> [New arguments.ex(expr.abst_expr)]}
+	|{single_id} identifier
+		{-> [New arguments.id(identifier)]}
+	|{multi_ex} [head]:expr comma                   [tail]:argument_list
+		{-> [New arguments.ex(head.abst_expr),      tail.arguments]}
+	|{multi_id} [head]:identifier comma             [tail]:argument_list
+		{-> [New arguments.id(head),                tail.arguments]};
+
+
+Abstract Syntax Tree
+
+session = statement_list*;
+statement_list 
+	={one}  statement
+	|{many} statement semi statement_list;
+
+statement =
+	 {expr}abst_expr
+	|{id} identifier;
+
+
+abst_expr = 
+	 {add_expr_term} [left]:abst_expr  [right]:abst_expr
+	|{add_expr_id}   [left]:abst_expr  [right]:identifier
+	|{add_id_term}   [left]:identifier [right]:abst_expr
+	|{add_id_id}     [left]:identifier [right]:identifier
+
+	|{mult_term_factor} [left]:abst_expr  [right]:abst_expr
+	|{mult_term_id}     [left]:abst_expr  [right]:identifier
+	|{mult_id_factor}   [left]:identifier [right]:abst_expr
+	|{mult_id_id}       [left]:identifier [right]:identifier
+
+	|{number} number
+	|{function} identifier arguments*;
+
+arguments =
+	 {ex} abst_expr 
+	|{ id} identifier;
+

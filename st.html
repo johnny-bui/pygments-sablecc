@@ -1,0 +1,579 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=latin1">
+  <style type="text/css">
+td.linenos { background-color: #f0f0f0; padding-right: 10px; }
+span.lineno { background-color: #f0f0f0; padding: 0 5px 0 5px; }
+pre { line-height: 125%; }
+body .hll { background-color: #ffffcc }
+body  { background: #f8f8f8; }
+body .c { color: #008800; font-style: italic } /* Comment */
+body .err { border: 1px solid #FF0000 } /* Error */
+body .k { color: #AA22FF; font-weight: bold } /* Keyword */
+body .o { color: #666666 } /* Operator */
+body .cm { color: #008800; font-style: italic } /* Comment.Multiline */
+body .cp { color: #008800 } /* Comment.Preproc */
+body .c1 { color: #008800; font-style: italic } /* Comment.Single */
+body .cs { color: #008800; font-weight: bold } /* Comment.Special */
+body .gd { color: #A00000 } /* Generic.Deleted */
+body .ge { font-style: italic } /* Generic.Emph */
+body .gr { color: #FF0000 } /* Generic.Error */
+body .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+body .gi { color: #00A000 } /* Generic.Inserted */
+body .go { color: #808080 } /* Generic.Output */
+body .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+body .gs { font-weight: bold } /* Generic.Strong */
+body .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+body .gt { color: #0040D0 } /* Generic.Traceback */
+body .kc { color: #AA22FF; font-weight: bold } /* Keyword.Constant */
+body .kd { color: #AA22FF; font-weight: bold } /* Keyword.Declaration */
+body .kn { color: #AA22FF; font-weight: bold } /* Keyword.Namespace */
+body .kp { color: #AA22FF } /* Keyword.Pseudo */
+body .kr { color: #AA22FF; font-weight: bold } /* Keyword.Reserved */
+body .kt { color: #00BB00; font-weight: bold } /* Keyword.Type */
+body .m { color: #666666 } /* Literal.Number */
+body .s { color: #BB4444 } /* Literal.String */
+body .na { color: #BB4444 } /* Name.Attribute */
+body .nb { color: #AA22FF } /* Name.Builtin */
+body .nc { color: #0000FF } /* Name.Class */
+body .no { color: #880000 } /* Name.Constant */
+body .nd { color: #AA22FF } /* Name.Decorator */
+body .ni { color: #999999; font-weight: bold } /* Name.Entity */
+body .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+body .nf { color: #00A000 } /* Name.Function */
+body .nl { color: #A0A000 } /* Name.Label */
+body .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+body .nt { color: #008000; font-weight: bold } /* Name.Tag */
+body .nv { color: #B8860B } /* Name.Variable */
+body .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+body .w { color: #bbbbbb } /* Text.Whitespace */
+body .mf { color: #666666 } /* Literal.Number.Float */
+body .mh { color: #666666 } /* Literal.Number.Hex */
+body .mi { color: #666666 } /* Literal.Number.Integer */
+body .mo { color: #666666 } /* Literal.Number.Oct */
+body .sb { color: #BB4444 } /* Literal.String.Backtick */
+body .sc { color: #BB4444 } /* Literal.String.Char */
+body .sd { color: #BB4444; font-style: italic } /* Literal.String.Doc */
+body .s2 { color: #BB4444 } /* Literal.String.Double */
+body .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+body .sh { color: #BB4444 } /* Literal.String.Heredoc */
+body .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+body .sx { color: #008000 } /* Literal.String.Other */
+body .sr { color: #BB6688 } /* Literal.String.Regex */
+body .s1 { color: #BB4444 } /* Literal.String.Single */
+body .ss { color: #B8860B } /* Literal.String.Symbol */
+body .bp { color: #AA22FF } /* Name.Builtin.Pseudo */
+body .vc { color: #B8860B } /* Name.Variable.Class */
+body .vg { color: #B8860B } /* Name.Variable.Global */
+body .vi { color: #B8860B } /* Name.Variable.Instance */
+body .il { color: #666666 } /* Literal.Number.Integer.Long */
+
+  </style>
+</head>
+<body>
+<h2></h2>
+
+<div class="highlight"><pre><span class="c">/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *</span>
+<span class="c"> * This file is part of SableCC.                             *</span>
+<span class="c"> * See the file &quot;LICENSE&quot; for copyright information and the  *</span>
+<span class="c"> * terms and conditions for copying, distribution and        *</span>
+<span class="c"> * modification of SableCC.                                  *</span>
+<span class="c"> * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */</span><span class="w"></span>
+
+
+<span class="c">/* This grammar defines the SableCC 3.x input language. */</span><span class="w"></span>
+
+<span class="kr">P</span><span class="nv">ackage</span><span class="w"> </span><span class="nv">org</span><span class="p">.</span><span class="nv">sablecc</span><span class="p">.</span><span class="nv">sablecc</span><span class="p">;</span><span class="w"> </span><span class="c">// Root Java package for generated files.</span>
+
+<span class="k">Helpers</span><span class="w"></span>
+
+<span class="c">/* These are character sets and regular expressions used in the</span>
+<span class="c">   definition of tokens. */</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">all</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="nc">0</span><span class="w"> </span><span class="p">..</span><span class="w"> </span><span class="nc">0</span><span class="nv">x</span><span class="err">FFFF</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">lowercase</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[&#39;</span><span class="s">a</span><span class="o">&#39;</span><span class="w"> </span><span class="p">..</span><span class="w"> </span><span class="o">&#39;</span><span class="s">z</span><span class="o">&#39;]</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">uppercase</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[&#39;</span><span class="s">A</span><span class="o">&#39;</span><span class="w"> </span><span class="p">..</span><span class="w"> </span><span class="o">&#39;</span><span class="s">Z</span><span class="o">&#39;]</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">digit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[&#39;</span><span class="s">0</span><span class="o">&#39;</span><span class="w"> </span><span class="p">..</span><span class="w"> </span><span class="o">&#39;</span><span class="s">9</span><span class="o">&#39;]</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">hex_digit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="nv">digit</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="o">[[&#39;</span><span class="s">a</span><span class="o">&#39;</span><span class="w"> </span><span class="p">..</span><span class="w"> </span><span class="o">&#39;</span><span class="s">f</span><span class="o">&#39;]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="o">[&#39;</span><span class="s">A</span><span class="o">&#39;</span><span class="w"> </span><span class="p">..</span><span class="w"> </span><span class="o">&#39;</span><span class="s">F</span><span class="o">&#39;]]]</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">tab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">9</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">cr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">13</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">lf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">10</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">eol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">cr</span><span class="w"> </span><span class="nv">lf</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nv">cr</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nv">lf</span><span class="p">;</span><span class="w"> </span><span class="c">// This takes care of different platforms</span>
+
+<span class="w">    </span><span class="nv">not_cr_lf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="nv">all</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">[</span><span class="nv">cr</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">lf</span><span class="o">]]</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">not_star</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="nv">all</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">&#39;</span><span class="s">*</span><span class="o">&#39;]</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">not_star_slash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="nv">not_star</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">&#39;</span><span class="s">/</span><span class="o">&#39;]</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">blank</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">(&#39;</span><span class="s"> </span><span class="o">&#39;</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nv">tab</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nv">eol</span><span class="o">)+</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">short_comment</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="nc">/</span><span class="o">&#39;</span><span class="w"> </span><span class="nv">not_cr_lf</span><span class="o">*</span><span class="w"> </span><span class="nv">eol</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">long_comment</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">&#39;</span><span class="nc">*</span><span class="o">&#39;</span><span class="w"> </span><span class="nv">not_star</span><span class="o">*</span><span class="w"> </span><span class="o">&#39;</span><span class="s">*</span><span class="o">&#39;+</span><span class="w"> </span><span class="o">(</span><span class="nv">not_star_slash</span><span class="w"> </span><span class="nv">not_star</span><span class="o">*</span><span class="w"> </span><span class="o">&#39;</span><span class="s">*</span><span class="o">&#39;+)*</span><span class="w"> </span><span class="o">&#39;</span><span class="s">/</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">comment</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">short_comment</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nv">long_comment</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">letter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">lowercase</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nv">uppercase</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">&#39;</span><span class="s">_</span><span class="o">&#39;</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">&#39;</span><span class="s">$</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">id_part</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">lowercase</span><span class="w"> </span><span class="o">(</span><span class="nv">lowercase</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nv">digit</span><span class="o">)*</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">States</span><span class="w"></span>
+<span class="w">    </span><span class="nv">normal</span><span class="o">,</span><span class="w"> </span><span class="c">/* The first state is the initial state. */</span><span class="w"></span>
+<span class="w">    </span><span class="nv">package</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">Tokens</span><span class="w"></span>
+
+<span class="c">/* These are token definitions. It is allowed to use helper regular *</span>
+<span class="c"> * expressions in the body of a token definition.                   *</span>
+<span class="c"> * On a given input, the longest valid definition is chosen, In     *</span>
+<span class="c"> * case of a match, the definition that appears first is chosen.    *</span>
+<span class="c"> * Example: on input -&gt; &#39;s&#39; &lt;- &quot;char&quot; will have precedence on       *</span>
+<span class="c"> * &quot;string&quot;, because it appears first.                              */</span><span class="w"></span>
+
+<span class="o">{</span><span class="nv">package</span><span class="o">}</span><span class="w"></span>
+<span class="w">    </span><span class="nv">pkg_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">letter</span><span class="w"> </span><span class="o">(</span><span class="nv">letter</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nv">digit</span><span class="o">)*</span><span class="p">;</span><span class="w"></span>
+
+<span class="o">{</span><span class="nv">normal</span><span class="o">-</span><span class="err">&gt;</span><span class="nv">package</span><span class="o">}</span><span class="w"></span>
+<span class="w">    </span><span class="nv">package</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="nc">e</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">states</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="nc">s</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">helpers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="nc">s</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">tokens</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="nc">s</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">ignored</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="nc">d</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">productions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="nc">s</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">abstract</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="nc">t</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">syntax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="nc">x</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">tree</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="nc">e</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">new</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="nc">w</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">null</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="nc">l</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">token_specifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="s">T</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">production_specifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="s">P</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">dot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="s">.</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">d_dot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="nc">.</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+
+<span class="o">{</span><span class="nv">normal</span><span class="o">,</span><span class="w"> </span><span class="nv">package</span><span class="o">-</span><span class="err">&gt;</span><span class="nv">normal</span><span class="o">}</span><span class="w"></span>
+<span class="w">    </span><span class="nv">semicolon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="s">;</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">equal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="s">=</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">l_bkt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="s">[</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">r_bkt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="s">]</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">l_par</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="s">(</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">r_par</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="s">)</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">l_brace</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="o">&#39;</span><span class="s">{</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">r_brace</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="o">&#39;</span><span class="s">}</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">plus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="s">+</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">minus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="s">-</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">q_mark</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="s">?</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">star</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="s">*</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">bar</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="s">|</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">comma</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="s">,</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">slash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="s">/</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">arrow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="nc">&gt;</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">colon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="s">:</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">id_part</span><span class="w"> </span><span class="o">(&#39;</span><span class="s">_</span><span class="o">&#39;</span><span class="w"> </span><span class="nv">id_part</span><span class="o">)*</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">char</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="s">&#39;</span><span class="o">&#39;</span><span class="w"> </span><span class="nv">not_cr_lf</span><span class="w"> </span><span class="o">&#39;</span><span class="s">&#39;</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">dec_char</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">digit</span><span class="o">+</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">hex_char</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="s">0</span><span class="o">&#39;</span><span class="w"> </span><span class="o">(&#39;</span><span class="s">x</span><span class="o">&#39;</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">&#39;</span><span class="s">X</span><span class="o">&#39;)</span><span class="w"> </span><span class="nv">hex_digit</span><span class="o">+</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&#39;</span><span class="s">&#39;</span><span class="o">&#39;</span><span class="w"> </span><span class="o">[</span><span class="nv">not_cr_lf</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">&#39;</span><span class="s">&#39;</span><span class="o">&#39;]+</span><span class="w"> </span><span class="o">&#39;</span><span class="s">&#39;</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">blank</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">blank</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">comment</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">comment</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">Ignored</span><span class="w"> </span><span class="k">Tokens</span><span class="w"></span>
+
+<span class="c">/* These tokens are simply ignored by the parser. */</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">blank</span><span class="o">,</span><span class="w"></span>
+<span class="w">    </span><span class="nv">comment</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">Productions</span><span class="w"></span>
+
+<span class="c">/* These are the productions of the grammar. The first production is *</span>
+<span class="c"> * used by the implicit start production:                            *</span>
+<span class="c"> *   start = (first production) EOF;                                 *</span>
+<span class="c"> * ?, * and + have the same meaning as in a regular expression.      *</span>
+<span class="c"> * In case a token and a production share the same name, the use of  *</span>
+<span class="c"> * P. (for production) or T. (for token) is required.                *</span>
+<span class="c"> * Each alternative can be explicitely named by preceding it with a  *</span>
+<span class="c"> * name enclosed in braces.                                          *</span>
+<span class="c"> * Each alternative element can be explicitely named by preceding it *</span>
+<span class="c"> * with a name enclosed in brackets and followed by a colon.         */</span><span class="w"></span>
+
+
+<span class="w">    </span><span class="nv">grammar</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="kr">P</span><span class="p">.</span><span class="nv">package</span><span class="o">?</span><span class="w"> </span><span class="kr">P</span><span class="p">.</span><span class="nv">helpers</span><span class="o">?</span><span class="w"> </span><span class="kr">P</span><span class="p">.</span><span class="nv">states</span><span class="o">?</span><span class="w"> </span><span class="kr">P</span><span class="p">.</span><span class="nv">tokens</span><span class="o">?</span><span class="w"> </span><span class="nv">ign_tokens</span><span class="o">?</span><span class="w"> </span><span class="kr">P</span><span class="p">.</span><span class="nv">productions</span><span class="o">?</span><span class="w"> </span><span class="kr">P</span><span class="p">.</span><span class="nv">ast</span><span class="o">?</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">grammar</span><span class="o">([</span><span class="kr">P</span><span class="p">.</span><span class="nv">package</span><span class="p">.</span><span class="nv">list_pkg_id</span><span class="o">],</span><span class="w"> </span><span class="kr">P</span><span class="p">.</span><span class="nv">helpers</span><span class="o">,</span><span class="w"> </span><span class="kr">P</span><span class="p">.</span><span class="nv">states</span><span class="o">,</span><span class="w"> </span>
+<span class="w">	                   </span><span class="kr">P</span><span class="p">.</span><span class="nv">tokens</span><span class="o">,</span><span class="w"> </span><span class="kr">P</span><span class="p">.</span><span class="nv">ign_tokens</span><span class="o">,</span><span class="w"> </span><span class="kr">P</span><span class="p">.</span><span class="nv">productions</span><span class="o">,</span><span class="w"> </span><span class="kr">P</span><span class="p">.</span><span class="nv">ast</span><span class="o">)</span><span class="w"></span>
+<span class="w">	   </span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">package</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="o">[</span><span class="nv">list_pkg_id</span><span class="o">]:</span><span class="nv">pkg_id</span><span class="o">*}</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="kr">T</span><span class="p">.</span><span class="nv">package</span><span class="w"> </span><span class="nv">pkg_name</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="o">[</span><span class="nv">pkg_name</span><span class="p">.</span><span class="nv">pkg_id</span><span class="o">]</span><span class="w"> </span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">pkg_name</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">pkg_id</span><span class="o">*}</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">pkg_id</span><span class="w"> </span><span class="o">[</span><span class="nv">pkg_ids</span><span class="o">]:</span><span class="nv">pkg_name_tail</span><span class="o">*</span><span class="w"> </span><span class="nv">semicolon</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="o">[</span><span class="nv">pkg_id</span><span class="o">,</span><span class="w"> </span><span class="nv">pkg_ids</span><span class="p">.</span><span class="nv">pkg_id</span><span class="o">]</span><span class="w"> </span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">pkg_name_tail</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">pkg_id</span><span class="w"> </span><span class="o">}</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">dot</span><span class="w"> </span><span class="nv">pkg_id</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">pkg_id</span><span class="w"> </span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">helpers</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="kr">T</span><span class="p">.</span><span class="nv">helpers</span><span class="w"> </span><span class="o">[</span><span class="nv">helper_defs</span><span class="o">]:</span><span class="nv">helper_def</span><span class="o">+</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">helpers</span><span class="o">([</span><span class="nv">helper_defs</span><span class="o">])</span><span class="w"> </span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">helper_def</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">id</span><span class="w"> </span><span class="nv">equal</span><span class="w"> </span><span class="nv">reg_exp</span><span class="w"> </span><span class="nv">semicolon</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">helper_def</span><span class="o">(</span><span class="nv">id</span><span class="o">,</span><span class="w"> </span><span class="nv">reg_exp</span><span class="o">)</span><span class="w"> </span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">states</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="kr">T</span><span class="p">.</span><span class="nv">states</span><span class="w"> </span><span class="nv">id_list</span><span class="w"> </span><span class="nv">semicolon</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">states</span><span class="o">([</span><span class="nv">id_list</span><span class="p">.</span><span class="nv">id</span><span class="o">])</span><span class="w"> </span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">id_list</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">id</span><span class="o">*}</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">id</span><span class="w"> </span><span class="o">[</span><span class="nv">ids</span><span class="o">]:</span><span class="nv">id_list_tail</span><span class="o">*</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="o">[</span><span class="nv">id</span><span class="o">,</span><span class="w"> </span><span class="nv">ids</span><span class="p">.</span><span class="nv">id</span><span class="o">]}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">id_list_tail</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">id</span><span class="w"> </span><span class="o">}</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">comma</span><span class="w"> </span><span class="nv">id</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">id</span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">tokens</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="kr">T</span><span class="p">.</span><span class="nv">tokens</span><span class="w"> </span><span class="o">[</span><span class="nv">token_defs</span><span class="o">]:</span><span class="nv">token_def</span><span class="o">+</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">tokens</span><span class="o">([</span><span class="nv">token_defs</span><span class="o">])</span><span class="w"> </span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">token_def</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">state_list</span><span class="o">?</span><span class="w"> </span><span class="nv">id</span><span class="w"> </span><span class="nv">equal</span><span class="w"> </span><span class="nv">reg_exp</span><span class="w"> </span><span class="nv">look_ahead</span><span class="o">?</span><span class="w"> </span><span class="nv">semicolon</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">token_def</span><span class="o">(</span><span class="nv">state_list</span><span class="o">,</span><span class="w"> </span><span class="nv">id</span><span class="o">,</span><span class="w"> </span><span class="nv">reg_exp</span><span class="o">,</span><span class="w"> </span><span class="nv">look_ahead</span><span class="p">.</span><span class="nv">slash</span><span class="o">,</span><span class="w"> </span><span class="nv">look_ahead</span><span class="p">.</span><span class="nv">reg_exp</span><span class="o">)</span><span class="w"> </span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">state_list</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">l_brace</span><span class="w"> </span><span class="nv">id</span><span class="w"> </span><span class="nv">transition</span><span class="o">?</span><span class="w"> </span><span class="o">[</span><span class="nv">state_lists</span><span class="o">]:</span><span class="nv">state_list_tail</span><span class="o">*</span><span class="w"> </span><span class="nv">r_brace</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">state_list</span><span class="o">(</span><span class="nv">id</span><span class="o">,</span><span class="w"> </span><span class="nv">transition</span><span class="o">,</span><span class="w"> </span><span class="o">[</span><span class="nv">state_lists</span><span class="o">])}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">state_list_tail</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">comma</span><span class="w"> </span><span class="nv">id</span><span class="w"> </span><span class="nv">transition</span><span class="o">?</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">state_list_tail</span><span class="o">(</span><span class="nv">id</span><span class="o">,</span><span class="w"> </span><span class="nv">transition</span><span class="o">)</span><span class="w"> </span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">transition</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">arrow</span><span class="w"> </span><span class="nv">id</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">transition</span><span class="o">(</span><span class="nv">id</span><span class="o">)}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">ign_tokens</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">ignored</span><span class="w"> </span><span class="kr">T</span><span class="p">.</span><span class="nv">tokens</span><span class="w"> </span><span class="nv">id_list</span><span class="o">?</span><span class="w"> </span><span class="nv">semicolon</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">ign_tokens</span><span class="o">([</span><span class="nv">id_list</span><span class="p">.</span><span class="nv">id</span><span class="o">])</span><span class="w"> </span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">look_ahead</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">slash</span><span class="w"> </span><span class="nv">reg_exp</span><span class="o">}</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">slash</span><span class="w"> </span><span class="nv">reg_exp</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">slash</span><span class="w"> </span><span class="nv">reg_exp</span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">reg_exp</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">concat</span><span class="w"> </span><span class="o">[</span><span class="nv">concats</span><span class="o">]:</span><span class="nv">reg_exp_tail</span><span class="o">*</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">reg_exp</span><span class="o">([</span><span class="nv">concat</span><span class="o">,</span><span class="w"> </span><span class="nv">concats</span><span class="p">.</span><span class="nv">concat</span><span class="o">])}</span><span class="p">;</span><span class="w"></span>
+
+
+<span class="w">    </span><span class="nv">reg_exp_tail</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">concat</span><span class="w"> </span><span class="o">}</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">bar</span><span class="w"> </span><span class="nv">concat</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">concat</span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">concat</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">[</span><span class="nv">un_exps</span><span class="o">]:</span><span class="nv">un_exp</span><span class="o">*</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">concat</span><span class="o">([</span><span class="nv">un_exps</span><span class="o">])}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">un_exp</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">basic</span><span class="w"> </span><span class="nv">un_op</span><span class="o">?</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">basic</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">char</span><span class="o">}</span><span class="w">    </span><span class="kr">P</span><span class="p">.</span><span class="nv">char</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">basic</span><span class="p">.</span><span class="nv">char</span><span class="o">(</span><span class="kr">P</span><span class="p">.</span><span class="nv">char</span><span class="o">)}</span><span class="w">		</span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">set</span><span class="o">}</span><span class="w">     </span><span class="nv">set</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">basic</span><span class="p">.</span><span class="nv">set</span><span class="o">(</span><span class="nv">set</span><span class="o">)}</span><span class="w">		</span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">string</span><span class="o">}</span><span class="w">  </span><span class="nv">string</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">basic</span><span class="p">.</span><span class="nv">string</span><span class="o">(</span><span class="nv">string</span><span class="o">)}</span><span class="w">	</span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">id</span><span class="o">}</span><span class="w">      </span><span class="nv">id</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">basic</span><span class="p">.</span><span class="nv">id</span><span class="o">(</span><span class="nv">id</span><span class="o">)}</span><span class="w">		</span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">reg_exp</span><span class="o">}</span><span class="w"> </span><span class="nv">l_par</span><span class="w"> </span><span class="nv">reg_exp</span><span class="w"> </span><span class="nv">r_par</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">basic</span><span class="p">.</span><span class="nv">reg_exp</span><span class="o">(</span><span class="nv">reg_exp</span><span class="o">)}</span><span class="w">	</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">char</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">char</span><span class="o">}</span><span class="w"> </span><span class="kr">T</span><span class="p">.</span><span class="nv">char</span><span class="w"> </span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">dec</span><span class="o">}</span><span class="w">  </span><span class="nv">dec_char</span><span class="w"> </span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">hex</span><span class="o">}</span><span class="w">  </span><span class="nv">hex_char</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">set</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">operation</span><span class="o">}</span><span class="w"> </span><span class="nv">l_bkt</span><span class="w"> </span><span class="o">[</span><span class="nv">left</span><span class="o">]:</span><span class="nv">basic</span><span class="w">  </span><span class="nv">bin_op</span><span class="w"> </span><span class="o">[</span><span class="nv">right</span><span class="o">]:</span><span class="nv">basic</span><span class="w">  </span><span class="nv">r_bkt</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">set</span><span class="p">.</span><span class="nv">operation</span><span class="o">(</span><span class="nv">left</span><span class="o">,</span><span class="w"> </span><span class="nv">bin_op</span><span class="o">,</span><span class="w"> </span><span class="nv">right</span><span class="o">)</span><span class="w"> </span><span class="o">}</span><span class="w"> </span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">interval</span><span class="o">}</span><span class="w">  </span><span class="nv">l_bkt</span><span class="w"> </span><span class="o">[</span><span class="nv">left</span><span class="o">]:</span><span class="kr">P</span><span class="p">.</span><span class="nv">char</span><span class="w"> </span><span class="nv">d_dot</span><span class="w">  </span><span class="o">[</span><span class="nv">right</span><span class="o">]:</span><span class="kr">P</span><span class="p">.</span><span class="nv">char</span><span class="w"> </span><span class="nv">r_bkt</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">set</span><span class="p">.</span><span class="nv">interval</span><span class="o">(</span><span class="nv">left</span><span class="o">,</span><span class="w"> </span><span class="nv">right</span><span class="o">)</span><span class="w"> </span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">un_op</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">star</span><span class="o">}</span><span class="w">   </span><span class="nv">star</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">un_op</span><span class="p">.</span><span class="nv">star</span><span class="o">(</span><span class="nv">star</span><span class="o">)}</span><span class="w">   </span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">q_mark</span><span class="o">}</span><span class="w"> </span><span class="nv">q_mark</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">un_op</span><span class="p">.</span><span class="nv">q_mark</span><span class="o">(</span><span class="nv">q_mark</span><span class="o">)}</span><span class="w"> </span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">plus</span><span class="o">}</span><span class="w">   </span><span class="nv">plus</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">un_op</span><span class="p">.</span><span class="nv">plus</span><span class="o">(</span><span class="nv">plus</span><span class="o">)}</span><span class="w">   </span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">bin_op</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">plus</span><span class="o">}</span><span class="w">  </span><span class="nv">plus</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">bin_op</span><span class="p">.</span><span class="nv">plus</span><span class="o">()}</span><span class="w">  </span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">minus</span><span class="o">}</span><span class="w"> </span><span class="nv">minus</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">bin_op</span><span class="p">.</span><span class="nv">minus</span><span class="o">()}</span><span class="w"> </span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">productions</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="kr">T</span><span class="p">.</span><span class="nv">productions</span><span class="w"> </span><span class="o">[</span><span class="nv">prods</span><span class="o">]:</span><span class="nv">prod</span><span class="o">+</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">productions</span><span class="o">([</span><span class="nv">prods</span><span class="o">])</span><span class="w"> </span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">prod</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">id</span><span class="w"> </span><span class="nv">prod_transform</span><span class="o">?</span><span class="w"> </span><span class="nv">equal</span><span class="w"> </span><span class="nv">alts</span><span class="w"> </span><span class="nv">semicolon</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">prod</span><span class="o">(</span><span class="nv">id</span><span class="o">,</span><span class="w"> </span><span class="nv">prod_transform</span><span class="p">.</span><span class="nv">arrow</span><span class="o">,</span><span class="w"> </span><span class="o">[</span><span class="nv">prod_transform</span><span class="p">.</span><span class="nv">elem</span><span class="o">],</span><span class="w"> </span><span class="o">[</span><span class="nv">alts</span><span class="p">.</span><span class="nv">list_alt</span><span class="o">])}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">prod_transform</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">arrow</span><span class="w"> </span><span class="nv">elem</span><span class="o">*}</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">l_brace</span><span class="w"> </span><span class="nv">arrow</span><span class="w"> </span><span class="o">[</span><span class="nv">elems</span><span class="o">]:</span><span class="nv">elem</span><span class="o">*</span><span class="w"> </span><span class="nv">r_brace</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">arrow</span><span class="w"> </span><span class="o">[</span><span class="nv">elems</span><span class="o">]}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">alts</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="o">[</span><span class="nv">list_alt</span><span class="o">]:</span><span class="nv">alt</span><span class="o">*}</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">alt</span><span class="w"> </span><span class="o">[</span><span class="nv">alts</span><span class="o">]:</span><span class="nv">alts_tail</span><span class="o">*</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="o">[</span><span class="nv">alt</span><span class="o">,</span><span class="w"> </span><span class="nv">alts</span><span class="p">.</span><span class="nv">alt</span><span class="o">]}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">alts_tail</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">alt</span><span class="o">}</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">bar</span><span class="w"> </span><span class="nv">alt</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">alt</span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">alt</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">alt_name</span><span class="o">?</span><span class="w"> </span><span class="o">[</span><span class="nv">elems</span><span class="o">]:</span><span class="nv">elem</span><span class="o">*</span><span class="w"> </span><span class="nv">alt_transform</span><span class="o">?</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">alt</span><span class="o">(</span><span class="nv">alt_name</span><span class="p">.</span><span class="nv">id</span><span class="o">,</span><span class="w"> </span><span class="o">[</span><span class="nv">elems</span><span class="o">],</span><span class="w"> </span><span class="nv">alt_transform</span><span class="o">)}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">alt_transform</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">l_brace</span><span class="w"> </span><span class="nv">arrow</span><span class="w"> </span><span class="o">[</span><span class="nv">terms</span><span class="o">]:</span><span class="w"> </span><span class="nv">term</span><span class="o">*</span><span class="w"> </span><span class="nv">r_brace</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">alt_transform</span><span class="o">(</span><span class="nv">l_brace</span><span class="o">,</span><span class="w"> </span><span class="o">[</span><span class="nv">terms</span><span class="o">],</span><span class="w"> </span><span class="nv">r_brace</span><span class="o">)}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">term</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">new</span><span class="o">}</span><span class="w"> </span><span class="nv">new</span><span class="w"> </span><span class="nv">prod_name</span><span class="w"> </span><span class="nv">l_par</span><span class="w"> </span><span class="nv">params</span><span class="o">?</span><span class="w"> </span><span class="nv">r_par</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">term</span><span class="p">.</span><span class="nv">new</span><span class="o">(</span><span class="nv">prod_name</span><span class="o">,</span><span class="w"> </span><span class="nv">l_par</span><span class="o">,</span><span class="w"> </span><span class="o">[</span><span class="nv">params</span><span class="p">.</span><span class="nv">list_term</span><span class="o">])</span><span class="w"> </span><span class="o">}</span><span class="w"> 		</span><span class="o">|</span><span class="w"></span>
+
+<span class="w">        </span><span class="o">{</span><span class="nv">list</span><span class="o">}</span><span class="w"> </span><span class="nv">l_bkt</span><span class="w"> </span><span class="nv">list_of_list_term</span><span class="o">?</span><span class="w"> </span><span class="nv">r_bkt</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">term</span><span class="p">.</span><span class="nv">list</span><span class="o">(</span><span class="nv">l_bkt</span><span class="o">,</span><span class="w"> </span><span class="o">[</span><span class="nv">list_of_list_term</span><span class="p">.</span><span class="nv">list_terms</span><span class="o">])}</span><span class="w"> 	</span><span class="o">|</span><span class="w"></span>
+
+<span class="w">        </span><span class="o">{</span><span class="nv">simple</span><span class="o">}</span><span class="w"> </span><span class="nv">specifier</span><span class="o">?</span><span class="w"> </span><span class="nv">id</span><span class="w"> </span><span class="nv">simple_term_tail</span><span class="o">?</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">term</span><span class="p">.</span><span class="nv">simple</span><span class="o">(</span><span class="nv">specifier</span><span class="o">,</span><span class="w"> </span><span class="nv">id</span><span class="o">,</span><span class="w"> </span><span class="nv">simple_term_tail</span><span class="p">.</span><span class="nv">id</span><span class="o">)}</span><span class="w"> 	</span><span class="o">|</span><span class="w"></span>
+
+<span class="w">        </span><span class="o">{</span><span class="nv">null</span><span class="o">}</span><span class="w"> </span><span class="nv">null</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">term</span><span class="p">.</span><span class="nv">null</span><span class="o">()}</span><span class="w">						</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">list_of_list_term</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="o">[</span><span class="nv">list_terms</span><span class="o">]:</span><span class="nv">list_term</span><span class="o">*</span><span class="w"> </span><span class="o">}</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">		</span><span class="nv">list_term</span><span class="w"> </span><span class="o">[</span><span class="nv">list_terms</span><span class="o">]:</span><span class="nv">list_term_tail</span><span class="o">*</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="o">[</span><span class="nv">list_term</span><span class="o">,</span><span class="w"> </span><span class="nv">list_terms</span><span class="p">.</span><span class="nv">list_term</span><span class="o">]</span><span class="w"> </span><span class="o">}</span><span class="w">    </span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">list_term</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">new</span><span class="o">}</span><span class="w"> </span><span class="nv">new</span><span class="w"> </span><span class="nv">prod_name</span><span class="w"> </span><span class="nv">l_par</span><span class="w"> </span><span class="nv">params</span><span class="o">?</span><span class="w"> </span><span class="nv">r_par</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">list_term</span><span class="p">.</span><span class="nv">new</span><span class="o">(</span><span class="nv">prod_name</span><span class="o">,</span><span class="w"> </span><span class="nv">l_par</span><span class="o">,</span><span class="w"> </span><span class="o">[</span><span class="nv">params</span><span class="p">.</span><span class="nv">list_term</span><span class="o">])}</span><span class="w">		</span><span class="o">|</span><span class="w"></span>
+<span class="w">       	</span><span class="o">{</span><span class="nv">simple</span><span class="o">}</span><span class="w"> </span><span class="nv">specifier</span><span class="o">?</span><span class="w"> </span><span class="nv">id</span><span class="w"> </span><span class="nv">simple_term_tail</span><span class="o">?</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">list_term</span><span class="p">.</span><span class="nv">simple</span><span class="o">(</span><span class="nv">specifier</span><span class="o">,</span><span class="w"> </span><span class="nv">id</span><span class="o">,</span><span class="w"> </span><span class="nv">simple_term_tail</span><span class="p">.</span><span class="nv">id</span><span class="o">)}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">list_term_tail</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">list_term</span><span class="o">}</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">	</span><span class="nv">comma</span><span class="w"> </span><span class="nv">list_term</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">list_term</span><span class="o">}</span><span class="w"> </span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">simple_term_tail</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">id</span><span class="o">}</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">dot</span><span class="w"> </span><span class="nv">id</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">id</span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">prod_name</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">id</span><span class="w"> </span><span class="nv">prod_name_tail</span><span class="o">?</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">prod_name</span><span class="o">(</span><span class="nv">id</span><span class="o">,</span><span class="w"> </span><span class="nv">prod_name_tail</span><span class="p">.</span><span class="nv">id</span><span class="o">)}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">prod_name_tail</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">id</span><span class="o">}</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">dot</span><span class="w"> </span><span class="nv">id</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">id</span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">params</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="o">[</span><span class="nv">list_term</span><span class="o">]:</span><span class="nv">term</span><span class="o">*}</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">       </span><span class="nv">term</span><span class="w"> </span><span class="o">[</span><span class="nv">params</span><span class="o">]:</span><span class="nv">params_tail</span><span class="o">*</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="o">[</span><span class="nv">term</span><span class="o">,</span><span class="w"> </span><span class="nv">params</span><span class="p">.</span><span class="nv">term</span><span class="o">]}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">params_tail</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">term</span><span class="o">}</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">       </span><span class="nv">comma</span><span class="w"> </span><span class="nv">term</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">term</span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">alt_name</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">id</span><span class="o">}</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">l_brace</span><span class="w"> </span><span class="nv">id</span><span class="w"> </span><span class="nv">r_brace</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">id</span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">elem</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">elem_name</span><span class="o">?</span><span class="w"> </span><span class="nv">specifier</span><span class="o">?</span><span class="w"> </span><span class="nv">id</span><span class="w"> </span><span class="nv">un_op</span><span class="o">?</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">elem</span><span class="o">(</span><span class="nv">elem_name</span><span class="p">.</span><span class="nv">id</span><span class="o">,</span><span class="w"> </span><span class="nv">specifier</span><span class="o">,</span><span class="w"> </span><span class="nv">id</span><span class="o">,</span><span class="w"> </span><span class="nv">un_op</span><span class="o">)</span><span class="w"> </span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">elem_name</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">id</span><span class="o">}</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">l_bkt</span><span class="w"> </span><span class="nv">id</span><span class="w"> </span><span class="nv">r_bkt</span><span class="w"> </span><span class="nv">colon</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">id</span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">specifier</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">token</span><span class="o">}</span><span class="w">      </span><span class="nv">token_specifier</span><span class="w"> </span><span class="nv">dot</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">specifier</span><span class="p">.</span><span class="nv">token</span><span class="o">()}</span><span class="w"> 			</span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">production</span><span class="o">}</span><span class="w"> </span><span class="nv">production_specifier</span><span class="w"> </span><span class="nv">dot</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">specifier</span><span class="p">.</span><span class="nv">production</span><span class="o">()}</span><span class="w">		</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">ast</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">abstract</span><span class="w"> </span><span class="nv">syntax</span><span class="w"> </span><span class="nv">tree</span><span class="w"> </span><span class="o">[</span><span class="nv">prods</span><span class="o">]:</span><span class="nv">ast_prod</span><span class="o">+</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">ast</span><span class="o">([</span><span class="nv">prods</span><span class="o">])</span><span class="w"> </span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">ast_prod</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">id</span><span class="w"> </span><span class="nv">equal</span><span class="w"> </span><span class="o">[</span><span class="nv">alts</span><span class="o">]:</span><span class="nv">ast_alts</span><span class="w"> </span><span class="nv">semicolon</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">ast_prod</span><span class="o">(</span><span class="nv">id</span><span class="o">,</span><span class="w"> </span><span class="o">[</span><span class="nv">alts</span><span class="p">.</span><span class="nv">list_ast_alt</span><span class="o">])}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">ast_alts</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="o">[</span><span class="nv">list_ast_alt</span><span class="o">]:</span><span class="nv">ast_alt</span><span class="o">*}</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">ast_alt</span><span class="w"> </span><span class="o">[</span><span class="nv">ast_alts</span><span class="o">]:</span><span class="nv">ast_alts_tail</span><span class="o">*</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="o">[</span><span class="nv">ast_alt</span><span class="o">,</span><span class="w"> </span><span class="nv">ast_alts</span><span class="p">.</span><span class="nv">ast_alt</span><span class="o">]}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">ast_alts_tail</span><span class="w"> </span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">ast_alt</span><span class="o">}</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">bar</span><span class="w"> </span><span class="nv">ast_alt</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">ast_alt</span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">ast_alt</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">alt_name</span><span class="o">?</span><span class="w"> </span><span class="o">[</span><span class="nv">elems</span><span class="o">]:</span><span class="nv">elem</span><span class="o">*</span><span class="w"></span>
+<span class="w">	   </span><span class="o">{-</span><span class="err">&gt;</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="nv">ast_alt</span><span class="o">(</span><span class="nv">alt_name</span><span class="p">.</span><span class="nv">id</span><span class="o">,</span><span class="w"> </span><span class="o">[</span><span class="nv">elems</span><span class="o">])}</span><span class="p">;</span><span class="w"></span>
+
+
+<span class="c">/*****************************************************************************************/</span><span class="w"></span>
+<span class="c">/*											 */</span><span class="w"></span>
+<span class="c">/*											 */</span><span class="w"></span>
+<span class="c">/*											 */</span><span class="w"></span>
+<span class="c">/*											 */</span><span class="w"></span>
+<span class="c">/*											 */</span><span class="w"></span>
+<span class="c">/*****************************************************************************************/</span><span class="w"></span>
+<span class="k">Abstract</span><span class="w"> </span><span class="k">Syntax</span><span class="w"> </span><span class="k">Tree</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">grammar</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">[</span><span class="nv">package</span><span class="o">]:</span><span class="nv">pkg_id</span><span class="o">*</span><span class="w"> </span><span class="kr">P</span><span class="p">.</span><span class="nv">helpers</span><span class="o">?</span><span class="w"> </span><span class="kr">P</span><span class="p">.</span><span class="nv">states</span><span class="o">?</span><span class="w"> </span><span class="kr">P</span><span class="p">.</span><span class="nv">tokens</span><span class="o">?</span><span class="w"> </span><span class="kr">P</span><span class="p">.</span><span class="nv">ign_tokens</span><span class="o">?</span><span class="w"> </span><span class="kr">P</span><span class="p">.</span><span class="nv">productions</span><span class="o">?</span><span class="w"> </span><span class="kr">P</span><span class="p">.</span><span class="nv">ast</span><span class="o">?</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">helpers</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">[</span><span class="nv">helper_defs</span><span class="o">]:</span><span class="nv">helper_def</span><span class="o">*</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">helper_def</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">id</span><span class="w"> </span><span class="nv">reg_exp</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">states</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">	</span><span class="o">[</span><span class="nv">list_id</span><span class="o">]:</span><span class="nv">id</span><span class="o">*</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">tokens</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">[</span><span class="nv">token_defs</span><span class="o">]:</span><span class="nv">token_def</span><span class="o">*</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">token_def</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">state_list</span><span class="o">?</span><span class="w"> </span><span class="nv">id</span><span class="w"> </span><span class="nv">reg_exp</span><span class="w"> </span><span class="nv">slash</span><span class="o">?</span><span class="w"> </span><span class="o">[</span><span class="nv">look_ahead</span><span class="o">]:</span><span class="nv">reg_exp</span><span class="o">?</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">state_list</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">id</span><span class="w"> </span><span class="nv">transition</span><span class="o">?</span><span class="w"> </span><span class="o">[</span><span class="nv">state_lists</span><span class="o">]:</span><span class="nv">state_list_tail</span><span class="o">*</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">state_list_tail</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">id</span><span class="w"> </span><span class="nv">transition</span><span class="o">?</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">transition</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">id</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">ign_tokens</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">[</span><span class="nv">list_id</span><span class="o">]:</span><span class="nv">id</span><span class="o">*</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">reg_exp</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">[</span><span class="nv">concats</span><span class="o">]:</span><span class="nv">concat</span><span class="o">*</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">concat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">	</span><span class="o">[</span><span class="nv">un_exps</span><span class="o">]:</span><span class="w"> </span><span class="nv">un_exp</span><span class="o">*</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">un_exp</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">basic</span><span class="w"> </span><span class="nv">un_op</span><span class="o">?</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">basic</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">char</span><span class="o">}</span><span class="w">    </span><span class="kr">P</span><span class="p">.</span><span class="nv">char</span><span class="w"> </span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">set</span><span class="o">}</span><span class="w">     </span><span class="nv">set</span><span class="w"> </span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">string</span><span class="o">}</span><span class="w">  </span><span class="nv">string</span><span class="w"> </span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">id</span><span class="o">}</span><span class="w">      </span><span class="nv">id</span><span class="w"> </span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">reg_exp</span><span class="o">}</span><span class="w"> </span><span class="nv">reg_exp</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">char</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">char</span><span class="o">}</span><span class="w"> </span><span class="kr">T</span><span class="p">.</span><span class="nv">char</span><span class="w"> </span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">dec</span><span class="o">}</span><span class="w">  </span><span class="nv">dec_char</span><span class="w"> </span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">hex</span><span class="o">}</span><span class="w">  </span><span class="nv">hex_char</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">set</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">operation</span><span class="o">}</span><span class="w"> </span><span class="o">[</span><span class="nv">left</span><span class="o">]:</span><span class="nv">basic</span><span class="w"> </span><span class="nv">bin_op</span><span class="w"> </span><span class="o">[</span><span class="nv">right</span><span class="o">]:</span><span class="nv">basic</span><span class="w"> </span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">interval</span><span class="o">}</span><span class="w">  </span><span class="o">[</span><span class="nv">left</span><span class="o">]:</span><span class="kr">P</span><span class="p">.</span><span class="nv">char</span><span class="w"> </span><span class="o">[</span><span class="nv">right</span><span class="o">]:</span><span class="kr">P</span><span class="p">.</span><span class="nv">char</span><span class="w"> </span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">un_op</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">star</span><span class="o">}</span><span class="w">   </span><span class="nv">star</span><span class="w"> 	</span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">q_mark</span><span class="o">}</span><span class="w"> </span><span class="nv">q_mark</span><span class="w"> </span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">plus</span><span class="o">}</span><span class="w">   </span><span class="nv">plus</span><span class="w">	</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">bin_op</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">plus</span><span class="o">}</span><span class="w"> </span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">minus</span><span class="o">}</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">productions</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">[</span><span class="nv">prods</span><span class="o">]:</span><span class="nv">prod</span><span class="o">*</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">prod</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">id</span><span class="w"> </span><span class="nv">arrow</span><span class="o">?</span><span class="w"> </span><span class="o">[</span><span class="nv">prod_transform</span><span class="o">]:</span><span class="nv">elem</span><span class="o">*</span><span class="w"> </span><span class="o">[</span><span class="nv">alts</span><span class="o">]:</span><span class="nv">alt</span><span class="o">*</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">alt</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">[</span><span class="nv">alt_name</span><span class="o">]:</span><span class="nv">id</span><span class="o">?</span><span class="w"> </span><span class="o">[</span><span class="nv">elems</span><span class="o">]:</span><span class="nv">elem</span><span class="o">*</span><span class="w"> </span><span class="nv">alt_transform</span><span class="o">?</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">alt_transform</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">	</span><span class="nv">l_brace</span><span class="w"> </span><span class="o">[</span><span class="nv">terms</span><span class="o">]:</span><span class="nv">term</span><span class="o">*</span><span class="w"> </span><span class="nv">r_brace</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">term</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">new</span><span class="o">}</span><span class="w"> </span><span class="nv">prod_name</span><span class="w"> </span><span class="nv">l_par</span><span class="w"> </span><span class="o">[</span><span class="nv">params</span><span class="o">]:</span><span class="nv">term</span><span class="o">*</span><span class="w"> </span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">list</span><span class="o">}</span><span class="w"> </span><span class="nv">l_bkt</span><span class="w"> </span><span class="o">[</span><span class="nv">list_terms</span><span class="o">]:</span><span class="nv">list_term</span><span class="o">*</span><span class="w"> </span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">simple</span><span class="o">}</span><span class="w"> </span><span class="nv">specifier</span><span class="o">?</span><span class="w"> </span><span class="nv">id</span><span class="w"> </span><span class="o">[</span><span class="nv">simple_term_tail</span><span class="o">]:</span><span class="nv">id</span><span class="o">?</span><span class="w"> </span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">null</span><span class="o">}</span><span class="w"> </span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">list_term</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">new</span><span class="o">}</span><span class="w"> </span><span class="nv">prod_name</span><span class="w"> </span><span class="nv">l_par</span><span class="w"> </span><span class="o">[</span><span class="nv">params</span><span class="o">]:</span><span class="nv">term</span><span class="o">*</span><span class="w"> </span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">simple</span><span class="o">}</span><span class="w"> </span><span class="nv">specifier</span><span class="o">?</span><span class="w"> </span><span class="nv">id</span><span class="w"> </span><span class="o">[</span><span class="nv">simple_term_tail</span><span class="o">]:</span><span class="nv">id</span><span class="o">?</span><span class="w"> </span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">prod_name</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">id</span><span class="w"> </span><span class="o">[</span><span class="nv">prod_name_tail</span><span class="o">]:</span><span class="nv">id</span><span class="o">?</span><span class="w"> </span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">elem</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">[</span><span class="nv">elem_name</span><span class="o">]:</span><span class="nv">id</span><span class="o">?</span><span class="w"> </span><span class="nv">specifier</span><span class="o">?</span><span class="w"> </span><span class="nv">id</span><span class="w"> </span><span class="nv">un_op</span><span class="o">?</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">specifier</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">token</span><span class="o">}</span><span class="w"> 	</span><span class="o">|</span><span class="w"></span>
+<span class="w">        </span><span class="o">{</span><span class="nv">production</span><span class="o">}</span><span class="w"> 	</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">ast</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">[</span><span class="nv">prods</span><span class="o">]:</span><span class="nv">ast_prod</span><span class="o">*</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">ast_prod</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="nv">id</span><span class="w"> </span><span class="o">[</span><span class="nv">alts</span><span class="o">]:</span><span class="nv">ast_alt</span><span class="o">*</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nv">ast_alt</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="o">[</span><span class="nv">alt_name</span><span class="o">]:</span><span class="nv">id</span><span class="o">?</span><span class="w"> </span><span class="o">[</span><span class="nv">elems</span><span class="o">]:</span><span class="nv">elem</span><span class="o">*</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</body>
+</html>

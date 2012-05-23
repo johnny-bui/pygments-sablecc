@@ -1,0 +1,8 @@
+; here is a test file for mapping
+; a comment begins with a ';', ends with a $
+; 
+; 
+burger -> fast foot
+brot -> foot
+rind fleisch -> protein
+
