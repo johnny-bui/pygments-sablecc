@@ -13,7 +13,7 @@ __all__ = ['UIL']
 
 class UIL(RegexLexer):
 	name = 'UIL'
-	aliases = ['User Interface Language']
+	aliases = ['uil']
 	filenames = ['*.uil']
 	mimetypes = ['text/x-uil']
 
